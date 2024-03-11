@@ -8,4 +8,6 @@ router.get("/api/users/:id?",UserController.getallUser)
 
 router.post("/api/users",UserController.insertUser)
 
+router.post("/api/update/:id",UserController.updateUser)
+
 export default router
