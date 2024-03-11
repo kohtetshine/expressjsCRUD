@@ -22,7 +22,7 @@ export class UserModel {
                         if(result.length>0){
                             resolve(result);
                         }else{
-                            resolve("There is no user for current ID");
+                            resolve(false);
                         }
                     }
                 })
@@ -75,15 +75,19 @@ export class UserModel {
         return new Promise(resolve=>{
             mydb.query("DELETE FROM `users` WHERE id=?" , [id],(err,result)=>{
                 if(err){
-                    console.log(err);
-                }
-                else if (result.affectedRows == 0){
-                    console.log("There is no User in Current ID. You can't delete");
+                    resolve(false)
                 }
                 else{
-                    resolve(result);
+                    resolve(true);
                 }
             })
+        })
+    }
+
+    static async deleteUserCheck(id){
+        var result = await this.getallUser(id)
+        return new Promise(resolve=>{
+            resolve(result);
         })
     }
 }

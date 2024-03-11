@@ -1,32 +1,40 @@
+import { validationResult } from "express-validator";
 import { UserModel } from "../../models/UserModel.mjs";
 
 
 export class UserController{
     static async getallUser(req,res){
-        var id = req.params.id;
-        var result = await UserModel.getallUser(id);
 
-        res.send(result);
+        var id = req.params.id;
+        if(id){
+            const checkresult = validationResult(req);
+
+            if(!checkresult.isEmpty()){
+                return res.status(400).send({errors:checkresult.array()})
+            }
+        }
+        var result = await UserModel.getallUser(id);
+        if(result){
+            return res.send(result);
+        }else{
+            return res.status(400).send({errors:"Can Find the User with this ID"})
+        }
     }
     static async insertUser(req,res){
+        const checkresult = validationResult(req);
+
+        if(!checkresult.isEmpty()){
+            return res.status(400).send({errors:checkresult.array()})
+        }
+
         var name = req.body.name;
         var email = req.body.email;
         var password = req.body.password;
 
-        if(!name){
-            res.send("You Need to Add Name in request body")
-        }
-        if(!email){
-            res.send("You Need to Add Email in request body")
-        }
-        if(!password){
-            res.send("You Need to Add Password in request body")
-        }
-
         var result = await UserModel.insertUser(name,email,password);
 
         if(result){
-            res.send("New User is Added")
+            return res.send("New User is Added")
         }
         
     }
@@ -40,17 +48,24 @@ export class UserController{
         var result = await UserModel.updateUser(id,name,email,password);
 
         if(result){
-            res.send("User is Updated")
+            return res.send("User is Updated")
         }
 
     }
 
     static async deleteUser(req,res){
         var id = req.params.id;
-        var result = await UserModel.deleteUser(id);
 
-        if(result){
-            res.send("User is Deleted")
+        var checkresult = await UserModel.getallUser(id);
+        if (checkresult){
+            var result = await UserModel.deleteUser(id);
+            if(result){
+                return res.send("Delete Successfully")
+            }else{
+                return res.send("Delete Failed")
+            }
+        }else{
+            return res.status(400).send({errors:"Can Find the User with this ID"})
         }
     }
 }
