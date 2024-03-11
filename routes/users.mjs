@@ -15,8 +15,12 @@ router.post("/api/users",[
     body("password").notEmpty().withMessage("Password Cannot Be Null"),
 ],UserController.insertUser)
 
-router.post("/api/update/:id",UserController.updateUser)
+router.post("/api/update/:id",[
+    param("id").isInt().withMessage("ID Must Be Integer")
+],UserController.updateUser)
 
-router.delete("/api/delete/:id",UserController.deleteUser)
+router.delete("/api/delete/:id",[
+    param("id").isInt().withMessage("ID Must Be Integer")
+],UserController.deleteUser)
 
 export default router

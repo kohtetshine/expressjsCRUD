@@ -45,10 +45,18 @@ export class UserController{
         var email = req.body.email;
         var password = req.body.password;
 
+        const checkresult = validationResult(req);
+
+        if(!checkresult.isEmpty()){
+            return res.status(400).send({errors:checkresult.array()})
+        }
+
         var result = await UserModel.updateUser(id,name,email,password);
 
         if(result){
             return res.send("User is Updated")
+        }else{
+            return res.status(400).send({errors:"Can Find the User with this ID"})
         }
 
     }
