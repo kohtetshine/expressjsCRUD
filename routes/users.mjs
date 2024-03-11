@@ -10,4 +10,6 @@ router.post("/api/users",UserController.insertUser)
 
 router.post("/api/update/:id",UserController.updateUser)
 
+router.delete("/api/delete/:id",UserController.deleteUser)
+
 export default router

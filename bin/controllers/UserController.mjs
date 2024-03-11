@@ -44,4 +44,13 @@ export class UserController{
         }
 
     }
+
+    static async deleteUser(req,res){
+        var id = req.params.id;
+        var result = await UserModel.deleteUser(id);
+
+        if(result){
+            res.send("User is Deleted")
+        }
+    }
 }

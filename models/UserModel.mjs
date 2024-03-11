@@ -69,4 +69,21 @@ export class UserModel {
             })
         })
     }
+
+    static async deleteUser(id){
+
+        return new Promise(resolve=>{
+            mydb.query("DELETE FROM `users` WHERE id=?" , [id],(err,result)=>{
+                if(err){
+                    console.log(err);
+                }
+                else if (result.affectedRows == 0){
+                    console.log("There is no User in Current ID. You can't delete");
+                }
+                else{
+                    resolve(result);
+                }
+            })
+        })
+    }
 }
